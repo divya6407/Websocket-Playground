@@ -1,8 +1,14 @@
 import { Server } from "socket.io";
 
-export function createSocketServer(httpServer) {
-  const io = new Server(httpServer, {
-    cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
+export const createSocketServer = (httpServer) => {
+  return new Server(httpServer, {
+    cors: {
+      origin: [
+        "http://localhost:5173",
+        "https://vercel.app"
+      ],
+      methods: ["GET", "POST"],
+      credentials: true
+    }
   });
-  return io;
-}
+};
