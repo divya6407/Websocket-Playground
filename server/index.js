@@ -16,12 +16,29 @@ const gameManager = new GameManager();
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+// Multi-origin setup for regular HTTP routes
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://vercel.app" // Your live Vercel URL
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
 app.get("/", (req, res) => {
   res.send("Backend is Running");
 });
 
-const PORT = 3000;
+// Render dynamically sets process.env.PORT. Fallback to 3000 locally.
+const PORT = process.env.PORT || 3000; 
 const httpServer = http.createServer(app);
 const io = createSocketServer(httpServer);
 
@@ -37,5 +54,5 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
