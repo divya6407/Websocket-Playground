@@ -19,7 +19,7 @@ const app = express();
 // Multi-origin setup for regular HTTP routes
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://vercel.app" // Your live Vercel URL
+  "https://websocket-playground.vercel.app" 
 ];
 
 app.use(cors({
